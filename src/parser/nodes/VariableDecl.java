@@ -3,8 +3,7 @@ package parser.nodes;
 import java.util.Map;
 
 public class VariableDecl {
-//    String id;
-//    Token id;
+
     Identifier id;
     Map<String,Object> init;
 

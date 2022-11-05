@@ -1,12 +1,14 @@
 package parser.nodes;
 
+import java.util.Map;
+
 public class VariableDecl {
 //    String id;
 //    Token id;
     Identifier id;
-    Integer init;
+    Map<String,Object> init;
 
-    public VariableDecl(Identifier id, Integer init) {
+    public VariableDecl(Identifier id, Map<String, Object> init) {
         this.id = id;
         this.init = init;
     }

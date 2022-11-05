@@ -1,14 +1,15 @@
 package parser.nodes;
 
-public class AssignmentStatement {
-    Identifier left;
-    String operator;
-    Integer right;
+import java.util.Map;
 
-    public AssignmentStatement(Identifier left, String operator, Integer right) {
+public class AssignmentStatement {
+    Map<String,Object> left;
+    String operator;
+    Map<String,Object> right;
+
+    public AssignmentStatement(Map<String, Object> left, String operator, Map<String, Object> right) {
         this.left = left;
         this.operator = operator;
         this.right = right;
-
     }
 }

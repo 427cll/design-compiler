@@ -96,23 +96,88 @@ public class Parser {
         };
     }
 
-    private Map<String,Object> ExpressionStatement() {
-        /*
-         * 目前的表达式只能是简单的  赋值表达式。。。
-         */
-
-
+    private Map<String, Object> ExpressionStatement() {
         return this.AssignmentStatement();
     }
 
-    private Map<String,Object> AssignmentStatement() {
-        Identifier left = this.Identifier();
+    private Map<String, Object> AssignmentStatement() {
+        Map<String, Object> left = this.AdditiveExpression();
+
+        if (!this.isAssignmentOperator(this.lookAhead)) {
+            return left;
+        }
+
         String operator = this.AssignmentOperator().getValue();
-        Integer right = Integer.parseInt(this.NumericLiteral().getValue());
+
+        Map<String, Object> right = this.AssignmentStatement();
+
         this.eat(TokenType.TK_SEMICOLON);
-        Map<String,Object> map=new HashMap<>();
-        map.put("ExpressionStatement",new AssignmentStatement(left, operator, right) );
+
+        Map<String, Object> AssignmentStatement = new HashMap<>();
+        AssignmentStatement.put("AssignmentStatement", new AssignmentStatement(checkValidLeftTarget(left), operator, right));
+        return AssignmentStatement;
+    }
+
+    private Map<String, Object> PrimaryExpression() {
+        return switch (this.lookAhead.getType()) {
+            case TK_INTEGER_CONST -> this.Literal();
+            case TK_LPAREN -> this.ParenthesizedExpression();
+            default -> this.LeftHandExpression();
+        };
+    }
+
+    private Map<String, Object> LeftHandExpression() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("LeftHandExpression", this.Identifier());
         return map;
+    }
+
+    private Map<String, Object> ParenthesizedExpression() {
+        return null;
+    }
+
+    private boolean isLiteral(TokenType type) {
+        return type == TokenType.TK_INTEGER_CONST;
+    }
+
+    private Map<String, Object> checkValidLeftTarget(Map<String, Object> left) {
+        String key = null;
+        for (String s : left.keySet()) {
+            key = s;
+        }
+        if (left.get(key) instanceof Identifier) {
+            return left;
+        }
+        throw new RuntimeException("Invalid left-hand value in assignment expression");
+    }
+
+    private boolean isAssignmentOperator(Token lookAhead) {
+//        后期可以添加 += 等复杂赋值运算符
+        return lookAhead.getType() == TokenType.TK_ASSIGN;
+    }
+
+    private Map<String, Object> AdditiveExpression() {
+        Map<String, Object> left = this.PrimaryExpression();
+
+        while (this.lookAhead.getType() == TokenType.TK_PLUS) {
+            String operator = this.eat(TokenType.TK_PLUS).getValue();
+            Map<String, Object> right = this.AdditiveExpression();
+            Map<String, Object> AdditiveExpression = new HashMap<>();
+            AdditiveExpression.put("AdditiveExpression", new AdditiveExpression(left, operator, right));
+            left = AdditiveExpression;
+        }
+        return left;
+    }
+
+    private Map<String, Object> Literal() {
+        Map<String, Object> map = new HashMap<>();
+        switch (this.lookAhead.getType()) {
+            case TK_INTEGER_CONST -> {
+                map.put("NumericLiteral", this.NumericLiteral());
+                return map;
+            }
+            default -> throw new RuntimeException();
+        }
     }
 
     private Token NumericLiteral() {
@@ -174,17 +239,16 @@ public class Parser {
     private VariableDecl VariableDecl() {
         Identifier identifier = this.Identifier();
 
-        Integer init =
+        Map<String,Object> init =
                 this.lookAhead.getType() == TokenType.TK_COMMA || this.lookAhead.getType() == TokenType.TK_SEMICOLON
                         ? null
                         : this.VariableInitializer();
         return new VariableDecl(identifier, init);
     }
 
-    private Integer VariableInitializer() {
+    private Map<String, Object> VariableInitializer() {
         this.eat(TokenType.TK_ASSIGN);
-        int value = Integer.parseInt(this.eat(TokenType.TK_INTEGER_CONST).getValue());
-        return value;
+        return this.AssignmentStatement();
     }
 
 

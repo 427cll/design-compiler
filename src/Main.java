@@ -1,6 +1,7 @@
 import lexer.Lexer;
 import parser.Parser;
 import parser.nodes.Program;
+import visitor.SemanticAnalyzer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,8 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         //1. 读入源代码
-        String fileName = "D:\\Code Field\\Project\\compiler\\src\\source-code";
-        String inputText = readFile(fileName);
+        String filePath = "src/source-code";
+        String inputText = readFile(filePath);
 
         //2. 词法分析
         Lexer lexer = new Lexer(inputText);
@@ -21,6 +22,8 @@ public class Main {
         Program program = parser.parse();
         System.out.println(program.toString());
         //4. 语义分析
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
+        semanticAnalyzer.analyze(program);
         //5. 代码生成
 
     }

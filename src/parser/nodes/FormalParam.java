@@ -1,7 +1,9 @@
 package parser.nodes;
 
 
-public class FormalParam {
+import visitor.NodeVisitor;
+
+public class FormalParam implements ASTNode{
     Type type;
     Identifier var;
 
@@ -16,5 +18,10 @@ public class FormalParam {
                 "type=" + type +
                 ", var=" + var +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitFormalParam(this);
     }
 }

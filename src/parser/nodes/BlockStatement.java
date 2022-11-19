@@ -1,8 +1,10 @@
 package parser.nodes;
 
+import visitor.NodeVisitor;
+
 import java.util.List;
 
-public class BlockStatement {
+public class BlockStatement implements ASTNode{
 
     List<Object> body;
 
@@ -15,5 +17,10 @@ public class BlockStatement {
         return "BlockStatement{" +
                 "body=" + body +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitBlockStatement(this);
     }
 }

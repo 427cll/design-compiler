@@ -66,10 +66,9 @@ public class Parser {
 
 
     /**
-     * 本来有个 stopLookAhead参数，在这里用不着
+     * 本来有个 stopLookAhead 参数，在这里用不着
      */
     private List<Object> StatementList() {
-
         List<Object> statementList = new ArrayList<>();
         while (this.lookAhead.getType() != TokenType.TK_EOF && this.lookAhead.getType() != TokenType.TK_RBRACE) {
             statementList.add(this.Statement());
@@ -91,7 +90,7 @@ public class Parser {
         return switch (token.getType()) {
             case TK_RETURN -> this.ReturnStatement();
             case TK_LBRACE -> this.BlockStatement();
-            case TK_INT -> this.VariableStatement();// 只用 int 类型
+            case TK_INT -> this.VariableStatement();
             default -> this.ExpressionStatement();
         };
     }
@@ -114,7 +113,7 @@ public class Parser {
         this.eat(TokenType.TK_SEMICOLON);
 
         Map<String, Object> AssignmentStatement = new HashMap<>();
-        AssignmentStatement.put("AssignmentStatement", new AssignmentStatement(checkValidLeftTarget(left), operator, right));
+        AssignmentStatement.put("AssignmentStatement", new AssignmentExpression(checkValidLeftTarget(left), operator, right));
         return AssignmentStatement;
     }
 
@@ -238,7 +237,6 @@ public class Parser {
 
     private VariableDecl VariableDecl() {
         Identifier identifier = this.Identifier();
-
         Map<String,Object> init =
                 this.lookAhead.getType() == TokenType.TK_COMMA || this.lookAhead.getType() == TokenType.TK_SEMICOLON
                         ? null
@@ -250,7 +248,6 @@ public class Parser {
         this.eat(TokenType.TK_ASSIGN);
         return this.AssignmentStatement();
     }
-
 
     private Map<String, Object> ReturnStatement() {
         Token token = this.eat(TokenType.TK_RETURN);

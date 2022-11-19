@@ -1,8 +1,10 @@
 package parser.nodes;
 
+import visitor.NodeVisitor;
+
 import java.util.List;
 
-public class Program {
+public class Program implements ASTNode{
     List<FuncDecl> funcDecls;
 
     public Program(List<FuncDecl> funcDecls) {
@@ -18,5 +20,10 @@ public class Program {
         return "Program{" +
                 "funcDecls=" + funcDecls +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitProgram(this);
     }
 }

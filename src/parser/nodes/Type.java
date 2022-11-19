@@ -1,8 +1,9 @@
 package parser.nodes;
 
 import lexer.token.Token;
+import visitor.NodeVisitor;
 
-public class Type {
+public class Type implements ASTNode {
     Token token;
 
     public Type(Token token) {
@@ -14,5 +15,10 @@ public class Type {
         return "Type{" +
                 "token=" + token +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitType(this);
     }
 }

@@ -1,8 +1,10 @@
 package parser.nodes;
 
+import visitor.NodeVisitor;
+
 import java.util.List;
 
-public class FuncDecl {
+public class FuncDecl implements ASTNode{
     Type returnType;
     String funcName;
     List<FormalParam> formalParamList;
@@ -23,5 +25,10 @@ public class FuncDecl {
                 ", formalParamList=" + formalParamList +
                 ", blockStatement=" + blockStatement +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitFuncDecl(this);
     }
 }

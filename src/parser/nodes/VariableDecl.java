@@ -1,8 +1,10 @@
 package parser.nodes;
 
+import visitor.NodeVisitor;
+
 import java.util.Map;
 
-public class VariableDecl {
+public class VariableDecl implements ASTNode{
 
     Identifier id;
     Map<String,Object> init;
@@ -18,5 +20,10 @@ public class VariableDecl {
                 "id=" + id +
                 ", init=" + init +
                 '}';
+    }
+
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visitVariableDecl(this);
     }
 }

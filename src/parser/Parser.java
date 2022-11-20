@@ -240,26 +240,30 @@ public class Parser {
     private Token eat(TokenType tokenType) {
         Token token = this.lookAhead;
         if (token.getType() != tokenType) {
-            System.out.println("\033[31m" + "@ Lineno:" + token.getLineno() + ", Column:" + token.getColumn());
-            System.out.println("Unexpected token '" + token.getType() + "', expected :'" + tokenType + "'; ");
-            System.out.println();
-
-            String[] split = text.split("\n");
-
-            for (int i = 0; i < split.length; i++) {
-                if (i == token.getLineno()) {
-                    System.out.println(split[i - 1]);
-                }
-            }
-
-            for (int i = 0; i < token.getColumn() - 1; i++) {
-                System.out.print(" ");
-            }
-
-            System.out.println("^");
-            System.exit(0);
+            eatError(tokenType, token);
         }
         this.lookAhead = this.lexer.getNextToken();
         return token;
+    }
+
+    private void eatError(TokenType tokenType, Token token) {
+        System.out.println("\033[31m" + "@ Lineno:" + token.getLineno() + ", Column:" + token.getColumn());
+        System.out.println("Unexpected token '" + token.getType() + "', expected :'" + tokenType + "'; ");
+        System.out.println();
+
+        String[] split = text.split("\n");
+
+        for (int i = 0; i < split.length; i++) {
+            if (i == token.getLineno()) {
+                System.out.println(split[i - 1]);
+            }
+        }
+
+        for (int i = 0; i < token.getColumn() - 1; i++) {
+            System.out.print(" ");
+        }
+
+        System.out.println("^");
+        System.exit(0);
     }
 }

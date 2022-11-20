@@ -13,14 +13,6 @@ public class FormalParam implements ASTNode{
     }
 
     @Override
-    public String toString() {
-        return "FormalParam{" +
-                "type=" + type +
-                ", var=" + var +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitFormalParam(this);
     }

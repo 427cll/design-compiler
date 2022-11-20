@@ -13,13 +13,6 @@ public class BlockStatement implements ASTNode{
     }
 
     @Override
-    public String toString() {
-        return "BlockStatement{" +
-                "body=" + body +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitBlockStatement(this);
     }

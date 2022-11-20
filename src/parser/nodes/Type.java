@@ -11,13 +11,6 @@ public class Type implements ASTNode {
     }
 
     @Override
-    public String toString() {
-        return "Type{" +
-                "token=" + token +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitType(this);
     }

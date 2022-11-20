@@ -18,16 +18,6 @@ public class FuncDecl implements ASTNode{
     }
 
     @Override
-    public String toString() {
-        return "FuncDecl{" +
-                "returnType=" + returnType +
-                ", funcName='" + funcName + '\'' +
-                ", formalParamList=" + formalParamList +
-                ", blockStatement=" + blockStatement +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitFuncDecl(this);
     }

@@ -13,14 +13,6 @@ public class ReturnStatement implements ASTNode {
     }
 
     @Override
-    public String toString() {
-        return "ReturnStatement{" +
-                "token=" + token +
-                ", right=" + right +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitReturnStatement(this);
     }

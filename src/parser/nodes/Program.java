@@ -16,13 +16,6 @@ public class Program implements ASTNode{
     }
 
     @Override
-    public String toString() {
-        return "Program{" +
-                "funcDecls=" + funcDecls +
-                '}';
-    }
-
-    @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitProgram(this);
     }

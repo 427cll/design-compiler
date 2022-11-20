@@ -4,10 +4,9 @@ import lexer.token.Token;
 import visitor.NodeVisitor;
 
 public class NumericLiteral implements ASTNode{
-
-    Token token;
+    Integer value;
     public NumericLiteral(Token numericLiteral) {
-        this.token = numericLiteral;
+        this.value = Integer.parseInt(numericLiteral.getValue());
     }
 
     @Override

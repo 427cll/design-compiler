@@ -1,20 +1,21 @@
 package parser.nodes;
 
+
 import visitor.NodeVisitor;
 
-public class AssignmentExpression implements ASTNode{
-    ASTNode left;
+public class BinaryExpression implements ASTNode{
     String operator;
+    ASTNode left;
     ASTNode right;
 
-    public AssignmentExpression(ASTNode left, String operator, ASTNode right) {
-        this.left = left;
+    public BinaryExpression(String operator, ASTNode left, ASTNode right) {
         this.operator = operator;
+        this.left = left;
         this.right = right;
     }
 
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visitAssignmentExpression(this);
+        visitor.visitAdditiveExpression(this);
     }
 }

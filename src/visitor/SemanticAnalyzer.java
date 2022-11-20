@@ -16,7 +16,7 @@ public class SemanticAnalyzer implements NodeVisitor {
 
 
     @Override
-    public void visitAdditiveExpression(AdditiveExpression additiveExpression) {
+    public void visitAdditiveExpression(BinaryExpression additiveExpression) {
 
     }
 
@@ -67,6 +67,11 @@ public class SemanticAnalyzer implements NodeVisitor {
 
     @Override
     public void visitVariableStatement(VariableStatement variableStatement) {
+
+    }
+
+    @Override
+    public void visitNumericLiteral() {
 
     }
 }

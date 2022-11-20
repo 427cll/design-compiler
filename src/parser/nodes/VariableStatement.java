@@ -13,13 +13,6 @@ public class VariableStatement implements ASTNode{
         this.declarations = declarations;
     }
 
-    @Override
-    public String toString() {
-        return "VariableStatement{" +
-                "type=" + type +
-                ", declarations=" + declarations +
-                '}';
-    }
 
     @Override
     public void accept(NodeVisitor visitor) {

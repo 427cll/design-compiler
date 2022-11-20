@@ -6,9 +6,9 @@ import java.util.List;
 
 public class BlockStatement implements ASTNode{
 
-    List<Object> body;
+    List<ASTNode> body;
 
-    public BlockStatement(List<Object> body) {
+    public BlockStatement(List<ASTNode> body) {
         this.body = body;
     }
 

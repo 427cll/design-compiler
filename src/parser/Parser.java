@@ -6,9 +6,7 @@ import lexer.token.TokenType;
 import parser.nodes.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Parser {
     private final Lexer lexer;
@@ -43,7 +41,7 @@ public class Parser {
 
         List<FormalParam> params = this.FormalParameterList();
 
-        BlockStatement blockStatement = ((BlockStatement) this.BlockStatement().get("BlockStatement"));
+        BlockStatement blockStatement = ((BlockStatement) this.BlockStatement());
 
         return new FuncDecl(type, funcNameToken.getValue(), params, blockStatement);
     }
@@ -68,8 +66,8 @@ public class Parser {
     /**
      * 本来有个 stopLookAhead 参数，在这里用不着
      */
-    private List<Object> StatementList() {
-        List<Object> statementList = new ArrayList<>();
+    private List<ASTNode> StatementList() {
+        List<ASTNode> statementList = new ArrayList<>();
         while (this.lookAhead.getType() != TokenType.TK_EOF && this.lookAhead.getType() != TokenType.TK_RBRACE) {
             statementList.add(this.Statement());
         }
@@ -85,7 +83,7 @@ public class Parser {
      *
      * @return 注意返回值不同情况下类型不同
      */
-    private Map<String, Object> Statement() {
+    private ASTNode Statement() {
         Token token = this.lookAhead;
         return switch (token.getType()) {
             case TK_RETURN -> this.ReturnStatement();
@@ -95,29 +93,26 @@ public class Parser {
         };
     }
 
-    private Map<String, Object> ExpressionStatement() {
+    private ASTNode ExpressionStatement() {
         return this.AssignmentStatement();
     }
 
-    private Map<String, Object> AssignmentStatement() {
-        Map<String, Object> left = this.AdditiveExpression();
-
+    private ASTNode AssignmentStatement() {
+        ASTNode left = this.AdditiveExpression();
         if (!this.isAssignmentOperator(this.lookAhead)) {
             return left;
         }
 
         String operator = this.AssignmentOperator().getValue();
 
-        Map<String, Object> right = this.AssignmentStatement();
+        ASTNode right = this.AssignmentStatement();
 
         this.eat(TokenType.TK_SEMICOLON);
 
-        Map<String, Object> AssignmentStatement = new HashMap<>();
-        AssignmentStatement.put("AssignmentStatement", new AssignmentExpression(checkValidLeftTarget(left), operator, right));
-        return AssignmentStatement;
+        return new AssignmentExpression(checkValidLeftTarget(left), operator, right);
     }
 
-    private Map<String, Object> PrimaryExpression() {
+    private ASTNode PrimaryExpression() {
         return switch (this.lookAhead.getType()) {
             case TK_INTEGER_CONST -> this.Literal();
             case TK_LPAREN -> this.ParenthesizedExpression();
@@ -125,13 +120,11 @@ public class Parser {
         };
     }
 
-    private Map<String, Object> LeftHandExpression() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("LeftHandExpression", this.Identifier());
-        return map;
+    private ASTNode LeftHandExpression() {
+        return this.Identifier();
     }
 
-    private Map<String, Object> ParenthesizedExpression() {
+    private ASTNode ParenthesizedExpression() {
         return null;
     }
 
@@ -139,12 +132,8 @@ public class Parser {
         return type == TokenType.TK_INTEGER_CONST;
     }
 
-    private Map<String, Object> checkValidLeftTarget(Map<String, Object> left) {
-        String key = null;
-        for (String s : left.keySet()) {
-            key = s;
-        }
-        if (left.get(key) instanceof Identifier) {
+    private ASTNode checkValidLeftTarget(ASTNode left) {
+        if (left instanceof Identifier) {
             return left;
         }
         throw new RuntimeException("Invalid left-hand value in assignment expression");
@@ -155,25 +144,21 @@ public class Parser {
         return lookAhead.getType() == TokenType.TK_ASSIGN;
     }
 
-    private Map<String, Object> AdditiveExpression() {
-        Map<String, Object> left = this.PrimaryExpression();
+    private ASTNode AdditiveExpression() {
+        ASTNode left = this.PrimaryExpression();
 
         while (this.lookAhead.getType() == TokenType.TK_PLUS) {
             String operator = this.eat(TokenType.TK_PLUS).getValue();
-            Map<String, Object> right = this.AdditiveExpression();
-            Map<String, Object> AdditiveExpression = new HashMap<>();
-            AdditiveExpression.put("AdditiveExpression", new AdditiveExpression(left, operator, right));
-            left = AdditiveExpression;
+            ASTNode right = this.AdditiveExpression();
+            left = new BinaryExpression(operator, left, right);
         }
         return left;
     }
 
-    private Map<String, Object> Literal() {
-        Map<String, Object> map = new HashMap<>();
+    private ASTNode Literal() {
         switch (this.lookAhead.getType()) {
             case TK_INTEGER_CONST -> {
-                map.put("NumericLiteral", this.NumericLiteral());
-                return map;
+                return new NumericLiteral(this.NumericLiteral());
             }
             default -> throw new RuntimeException();
         }
@@ -188,13 +173,11 @@ public class Parser {
     }
 
 
-    private Map<String, Object> BlockStatement() {
+    private ASTNode BlockStatement() {
         this.eat(TokenType.TK_LBRACE);
-        List<Object> statementNodes = this.StatementList();
+        List<ASTNode> statementNodes = this.StatementList();
         this.eat(TokenType.TK_RBRACE);
-        Map<String, Object> map = new HashMap<>();
-        map.put("BlockStatement", new BlockStatement(statementNodes));
-        return map;
+        return new BlockStatement(statementNodes);
     }
 
     private FormalParam FormalParam() {
@@ -216,13 +199,11 @@ public class Parser {
         return new Type(token);
     }
 
-    private Map<String, Object> VariableStatement() {
+    private ASTNode VariableStatement() {
         Type type = this.Type();
         List<VariableDecl> declarations = this.VariableDeclList();
         this.eat(TokenType.TK_SEMICOLON);
-        Map<String, Object> map = new HashMap<>();
-        map.put("VariableStatement", new VariableStatement(type, declarations));
-        return map;
+        return new VariableStatement(type, declarations);
     }
 
     private List<VariableDecl> VariableDeclList() {
@@ -237,25 +218,23 @@ public class Parser {
 
     private VariableDecl VariableDecl() {
         Identifier identifier = this.Identifier();
-        Map<String,Object> init =
+        ASTNode init =
                 this.lookAhead.getType() == TokenType.TK_COMMA || this.lookAhead.getType() == TokenType.TK_SEMICOLON
                         ? null
                         : this.VariableInitializer();
         return new VariableDecl(identifier, init);
     }
 
-    private Map<String, Object> VariableInitializer() {
+    private ASTNode VariableInitializer() {
         this.eat(TokenType.TK_ASSIGN);
         return this.AssignmentStatement();
     }
 
-    private Map<String, Object> ReturnStatement() {
+    private ASTNode ReturnStatement() {
         Token token = this.eat(TokenType.TK_RETURN);
         Integer right = Integer.parseInt(this.eat(TokenType.TK_INTEGER_CONST).getValue());
         this.eat(TokenType.TK_SEMICOLON);
-        Map<String, Object> map = new HashMap<>();
-        map.put("ReturnStatement", new ReturnStatement(token, right));
-        return map;
+        return new ReturnStatement(token, right);
     }
 
     private Token eat(TokenType tokenType) {

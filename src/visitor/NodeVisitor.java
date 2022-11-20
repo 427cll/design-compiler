@@ -3,7 +3,7 @@ package visitor;
 import parser.nodes.*;
 
 public interface NodeVisitor {
-    void visitAdditiveExpression(AdditiveExpression additiveExpression);
+    void visitAdditiveExpression(BinaryExpression additiveExpression);
     void visitAssignmentExpression(AssignmentExpression  assignmentExpression);
     void visitBlockStatement(BlockStatement blockStatement);
     void visitFormalParam(FormalParam formalParam);
@@ -14,4 +14,6 @@ public interface NodeVisitor {
     void visitType(Type type);
     void visitVariableDecl(VariableDecl variableDecl);
     void visitVariableStatement(VariableStatement variableStatement);
+
+    void visitNumericLiteral();
 }

@@ -1,7 +1,7 @@
+import analyzer.SemanticAnalyzer;
 import lexer.Lexer;
 import parser.Parser;
 import parser.nodes.Program;
-import visitor.SemanticAnalyzer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,11 +20,12 @@ public class Main {
         //3. 语法分析
         Parser parser = new Parser(lexer, inputText); //初始化语法分析器
         Program program = parser.parse();
-        System.out.println(program.toString());
+
         //4. 语义分析
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
         semanticAnalyzer.analyze(program);
         //5. 代码生成
+
 
     }
 

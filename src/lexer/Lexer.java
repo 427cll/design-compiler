@@ -50,7 +50,7 @@ public class Lexer {
                 return handleIdentOrReserve();
             }
 
-            //不是字母，不是数字，只剩下符号辣
+            //不是字母，不是数字, 很可能是符号
             if (CharCheck.isDoublePunct(text, position)) {
                 return handleDoublePunct();
             } else if (CharCheck.isSinglePunct(currChar)) {

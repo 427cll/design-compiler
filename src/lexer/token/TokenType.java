@@ -35,6 +35,8 @@ public enum TokenType {
     TK_IF("if"),
     TK_THEN("then"),
     TK_ELSE("else"),
+    TK_WHILE("while"),
+
 
     TK_IDENT("IDENT"),
 

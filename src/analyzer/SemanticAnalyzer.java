@@ -1,4 +1,4 @@
-package visitor;
+package analyzer;
 
 import parser.nodes.*;
 
@@ -6,14 +6,19 @@ import java.util.List;
 
 public class SemanticAnalyzer implements NodeVisitor {
 
-    public void analyze(Program program){
+    Environment currentEnvironment;
+
+    public SemanticAnalyzer() {
+        currentEnvironment = new Environment(null);
+    }
+
+    public void analyze(Program program) {
         List<FuncDecl> funcNodes = program.getFuncNodes();
+        //每一个函数接受检查
         for (FuncDecl funcNode : funcNodes) {
             funcNode.accept(this);
         }
-
     }
-
 
     @Override
     public void visitAdditiveExpression(BinaryExpression additiveExpression) {
@@ -37,6 +42,19 @@ public class SemanticAnalyzer implements NodeVisitor {
 
     @Override
     public void visitFuncDecl(FuncDecl funcDecl) {
+
+        this.currentEnvironment.define(funcDecl.getIdentifier(), null);
+        currentEnvironment = new Environment(currentEnvironment);
+
+        List<FormalParam> formalParamList = funcDecl.getFormalParamList();
+        for (FormalParam formalParam : formalParamList) {
+            formalParam.accept(this);
+        }
+
+        BlockStatement blockStatement = funcDecl.getBlockStatement();
+        blockStatement.accept(this);
+
+        this.currentEnvironment=currentEnvironment.parent;
 
     }
 
@@ -72,6 +90,11 @@ public class SemanticAnalyzer implements NodeVisitor {
 
     @Override
     public void visitNumericLiteral() {
+
+    }
+
+    @Override
+    public void visitBooleanLiteral() {
 
     }
 }

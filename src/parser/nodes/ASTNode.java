@@ -1,10 +1,7 @@
 package parser.nodes;
 
-import visitor.NodeVisitor;
-
-import java.util.List;
+import analyzer.NodeVisitor;
 
 public interface ASTNode {
     void accept(NodeVisitor visitor);
-    List<ASTNode> children = null;
 }

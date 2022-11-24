@@ -1,6 +1,6 @@
 package parser.nodes;
 
-import visitor.NodeVisitor;
+import analyzer.NodeVisitor;
 
 public class AssignmentExpression implements ASTNode{
     ASTNode left;

@@ -1,18 +1,18 @@
 package parser.nodes;
 
-import visitor.NodeVisitor;
+import analyzer.NodeVisitor;
 
 import java.util.List;
 
 public class FuncDecl implements ASTNode{
     Type returnType;
-    String funcName;
+    Identifier identifier;
     List<FormalParam> formalParamList;
     BlockStatement blockStatement;
 
-    public FuncDecl(Type type, String funcName, List<FormalParam> formalParamList, BlockStatement blockStatement) {
+    public FuncDecl(Type type, Identifier identifier, List<FormalParam> formalParamList, BlockStatement blockStatement) {
         this.returnType = type;
-        this.funcName = funcName;
+        this.identifier = identifier;
         this.formalParamList = formalParamList;
         this.blockStatement = blockStatement;
     }
@@ -20,5 +20,17 @@ public class FuncDecl implements ASTNode{
     @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitFuncDecl(this);
+    }
+
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    public List<FormalParam> getFormalParamList() {
+        return formalParamList;
+    }
+
+    public BlockStatement getBlockStatement() {
+        return blockStatement;
     }
 }

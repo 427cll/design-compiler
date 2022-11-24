@@ -1,7 +1,7 @@
 package parser.nodes;
 
 import lexer.token.Token;
-import visitor.NodeVisitor;
+import analyzer.NodeVisitor;
 
 public class ReturnStatement implements ASTNode {
     Token token; //token日后可以用来保存识别该 ASTNode 的类型

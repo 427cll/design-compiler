@@ -37,13 +37,13 @@ public class Parser {
     private FuncDecl FunctionDeclaration() {
         Type type = this.Type();
 
-        Token funcNameToken = this.eat(TokenType.TK_IDENT);
+        Identifier identifier = this.Identifier();
 
         List<FormalParam> params = this.FormalParameterList();
 
         BlockStatement blockStatement = ((BlockStatement) this.BlockStatement());
 
-        return new FuncDecl(type, funcNameToken.getValue(), params, blockStatement);
+        return new FuncDecl(type, identifier, params, blockStatement);
     }
 
 
@@ -88,9 +88,19 @@ public class Parser {
         return switch (token.getType()) {
             case TK_RETURN -> this.ReturnStatement();
             case TK_LBRACE -> this.BlockStatement();
-            case TK_INT -> this.VariableStatement();
+            case TK_INT, TK_BOOL -> this.VariableStatement();
+            case TK_IF -> this.IfStatement();
+            case TK_WHILE -> this.WhileStatement();
             default -> this.ExpressionStatement();
         };
+    }
+
+    private ASTNode WhileStatement() {
+        return null;
+    }
+
+    private ASTNode IfStatement() {
+        return null;
     }
 
     private ASTNode ExpressionStatement() {
@@ -114,7 +124,7 @@ public class Parser {
 
     private ASTNode PrimaryExpression() {
         return switch (this.lookAhead.getType()) {
-            case TK_INTEGER_CONST -> this.Literal();
+            case TK_INTEGER_CONST, TK_BOOL_CONST_TRUE, TK_BOOL_CONST_FALSE -> this.Literal();
             case TK_LPAREN -> this.ParenthesizedExpression();
             default -> this.LeftHandExpression();
         };
@@ -140,7 +150,6 @@ public class Parser {
     }
 
     private boolean isAssignmentOperator(Token lookAhead) {
-//        后期可以添加 += 等复杂赋值运算符
         return lookAhead.getType() == TokenType.TK_ASSIGN;
     }
 
@@ -156,22 +165,28 @@ public class Parser {
     }
 
     private ASTNode Literal() {
-        switch (this.lookAhead.getType()) {
-            case TK_INTEGER_CONST -> {
-                return new NumericLiteral(this.NumericLiteral());
-            }
-            default -> throw new RuntimeException();
-        }
+        return switch (this.lookAhead.getType()) {
+            case TK_INTEGER_CONST -> new NumericLiteral(this.NumericLiteral());
+            case TK_BOOL_CONST_TRUE -> new BooleanLiteral(this.BooleanLiteral(0));
+            case TK_BOOL_CONST_FALSE -> new BooleanLiteral(this.BooleanLiteral(1));
+            default -> throw new IllegalStateException("Unexpected value: " + this.lookAhead.getType());
+        };
     }
 
     private Token NumericLiteral() {
         return this.eat(TokenType.TK_INTEGER_CONST);
     }
 
+    private Token BooleanLiteral(int i) {
+        if (i == 1)
+            return this.eat(TokenType.TK_BOOL_CONST_FALSE);
+        else
+            return this.eat(TokenType.TK_BOOL_CONST_TRUE);
+    }
+
     private Token AssignmentOperator() {
         return this.eat(TokenType.TK_ASSIGN);
     }
-
 
     private ASTNode BlockStatement() {
         this.eat(TokenType.TK_LBRACE);
@@ -192,10 +207,11 @@ public class Parser {
     }
 
     private Type Type() {
-        /*
-          类型暂时只用 int
-        */
-        Token token = this.eat(TokenType.TK_INT);
+        Token token = null;
+        switch (this.lookAhead.getType()) {
+            case TK_INT -> token = this.eat(TokenType.TK_INT);
+            case TK_BOOL -> token = this.eat(TokenType.TK_BOOL);
+        }
         return new Type(token);
     }
 
@@ -248,7 +264,7 @@ public class Parser {
 
     private void eatError(TokenType tokenType, Token token) {
         System.out.println("\033[31m" + "@ Lineno:" + token.getLineno() + ", Column:" + token.getColumn());
-        System.out.println("Unexpected token '" + token.getType() + "', expected :'" + tokenType + "'; ");
+        System.out.println("Unexpected token '" + token.getType() + "';");
         System.out.println();
 
         String[] split = text.split("\n");

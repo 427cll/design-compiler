@@ -1,7 +1,7 @@
 package parser.nodes;
 
 
-import visitor.NodeVisitor;
+import analyzer.NodeVisitor;
 
 public class FormalParam implements ASTNode{
     Type type;

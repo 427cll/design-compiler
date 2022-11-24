@@ -16,4 +16,8 @@ public class BlockStatement implements ASTNode{
     public void accept(NodeVisitor visitor) {
         visitor.visitBlockStatement(this);
     }
+
+    public List<ASTNode> getBody() {
+        return body;
+    }
 }

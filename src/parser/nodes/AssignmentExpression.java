@@ -17,4 +17,16 @@ public class AssignmentExpression implements ASTNode{
     public void accept(NodeVisitor visitor) {
         visitor.visitAssignmentExpression(this);
     }
+
+    public ASTNode getLeft() {
+        return left;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public ASTNode getRight() {
+        return right;
+    }
 }

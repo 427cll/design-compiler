@@ -33,4 +33,8 @@ public class FuncDecl implements ASTNode{
     public BlockStatement getBlockStatement() {
         return blockStatement;
     }
+
+    public Type getReturnType() {
+        return returnType;
+    }
 }

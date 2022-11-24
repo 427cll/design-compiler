@@ -15,8 +15,14 @@ public class Identifier implements ASTNode{
         return name;
     }
 
+    public Token getToken() {
+        return token;
+    }
+
     @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitIdentifier(this);
     }
+
+
 }

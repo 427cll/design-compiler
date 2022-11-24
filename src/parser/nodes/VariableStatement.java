@@ -18,4 +18,12 @@ public class VariableStatement implements ASTNode{
     public void accept(NodeVisitor visitor) {
         visitor.visitVariableStatement(this);
     }
+
+    public List<VariableDecl> getDeclarations() {
+        return declarations;
+    }
+
+    public Type getType() {
+        return type;
+    }
 }

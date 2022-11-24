@@ -17,4 +17,12 @@ public class VariableDecl implements ASTNode{
     public void accept(NodeVisitor visitor) {
         visitor.visitVariableDecl(this);
     }
+
+    public Identifier getId() {
+        return id;
+    }
+
+    public ASTNode getInit() {
+        return init;
+    }
 }

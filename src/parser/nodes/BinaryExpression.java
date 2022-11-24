@@ -16,6 +16,15 @@ public class BinaryExpression implements ASTNode{
 
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visitAdditiveExpression(this);
+        visitor.visitBinaryExpression(this);
+    }
+
+
+    public ASTNode getLeft() {
+        return left;
+    }
+
+    public ASTNode getRight() {
+        return right;
     }
 }

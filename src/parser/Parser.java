@@ -1,5 +1,6 @@
 package parser;
 
+import error.UnexpectedTokenException;
 import lexer.Lexer;
 import lexer.token.Token;
 import lexer.token.TokenType;
@@ -104,23 +105,27 @@ public class Parser {
     }
 
     private ASTNode ExpressionStatement() {
-        return this.AssignmentStatement();
+        ASTNode astNode = this.AssignmentExpression();
+        this.eat(TokenType.TK_SEMICOLON);
+        return astNode;
     }
 
-    private ASTNode AssignmentStatement() {
+    private ASTNode AssignmentExpression() {
+
         ASTNode left = this.AdditiveExpression();
+
         if (!this.isAssignmentOperator(this.lookAhead)) {
             return left;
         }
 
         String operator = this.AssignmentOperator().getValue();
 
-        ASTNode right = this.AssignmentStatement();
+        ASTNode right = this.AssignmentExpression();
 
-        this.eat(TokenType.TK_SEMICOLON);
 
-        return new AssignmentExpression(checkValidLeftTarget(left), operator, right);
+        return new AssignmentExpression(left, operator, right);
     }
+
 
     private ASTNode PrimaryExpression() {
         return switch (this.lookAhead.getType()) {
@@ -136,17 +141,6 @@ public class Parser {
 
     private ASTNode ParenthesizedExpression() {
         return null;
-    }
-
-    private boolean isLiteral(TokenType type) {
-        return type == TokenType.TK_INTEGER_CONST;
-    }
-
-    private ASTNode checkValidLeftTarget(ASTNode left) {
-        if (left instanceof Identifier) {
-            return left;
-        }
-        throw new RuntimeException("Invalid left-hand value in assignment expression");
     }
 
     private boolean isAssignmentOperator(Token lookAhead) {
@@ -243,12 +237,12 @@ public class Parser {
 
     private ASTNode VariableInitializer() {
         this.eat(TokenType.TK_ASSIGN);
-        return this.AssignmentStatement();
+        return this.AssignmentExpression();
     }
 
     private ASTNode ReturnStatement() {
         Token token = this.eat(TokenType.TK_RETURN);
-        Integer right = Integer.parseInt(this.eat(TokenType.TK_INTEGER_CONST).getValue());
+        ASTNode right = this.AssignmentExpression();
         this.eat(TokenType.TK_SEMICOLON);
         return new ReturnStatement(token, right);
     }
@@ -256,30 +250,11 @@ public class Parser {
     private Token eat(TokenType tokenType) {
         Token token = this.lookAhead;
         if (token.getType() != tokenType) {
-            eatError(tokenType, token);
+            throw new UnexpectedTokenException(token);
         }
         this.lookAhead = this.lexer.getNextToken();
         return token;
     }
 
-    private void eatError(TokenType tokenType, Token token) {
-        System.out.println("\033[31m" + "@ Lineno:" + token.getLineno() + ", Column:" + token.getColumn());
-        System.out.println("Unexpected token '" + token.getType() + "';");
-        System.out.println();
 
-        String[] split = text.split("\n");
-
-        for (int i = 0; i < split.length; i++) {
-            if (i == token.getLineno()) {
-                System.out.println(split[i - 1]);
-            }
-        }
-
-        for (int i = 0; i < token.getColumn() - 1; i++) {
-            System.out.print(" ");
-        }
-
-        System.out.println("^");
-        System.exit(0);
-    }
 }

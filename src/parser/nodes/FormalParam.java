@@ -5,15 +5,23 @@ import analyzer.NodeVisitor;
 
 public class FormalParam implements ASTNode{
     Type type;
-    Identifier var;
+    Identifier id;
 
-    public FormalParam(Type type, Identifier var) {
+    public FormalParam(Type type, Identifier id) {
         this.type = type;
-        this.var = var;
+        this.id = id;
     }
 
     @Override
     public void accept(NodeVisitor visitor) {
         visitor.visitFormalParam(this);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Identifier getId() {
+        return id;
     }
 }

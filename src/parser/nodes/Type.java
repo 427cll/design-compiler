@@ -3,7 +3,7 @@ package parser.nodes;
 import lexer.token.Token;
 import analyzer.NodeVisitor;
 
-public class Type implements ASTNode {
+public class Type extends ASTNode {
     Token token;
 
     public Type(Token token) {

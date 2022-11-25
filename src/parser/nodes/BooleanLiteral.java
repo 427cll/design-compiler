@@ -3,7 +3,7 @@ package parser.nodes;
 import analyzer.NodeVisitor;
 import lexer.token.Token;
 
-public class BooleanLiteral implements ASTNode{
+public class BooleanLiteral extends ASTNode{
     Boolean value;
     Token token;
 

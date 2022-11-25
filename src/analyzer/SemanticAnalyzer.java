@@ -66,7 +66,7 @@ public class SemanticAnalyzer implements NodeVisitor {
         ASTNode right = assignmentExpression.getRight();
 
         if (!(left instanceof Identifier))
-            throw new InvalidLeftHandValueException("Invalid left-hand value " + left + " in assignment expression");
+            throw new InvalidLeftHandValueException(left.getToken());
 
         left.accept(this);
         right.accept(this);

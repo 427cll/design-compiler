@@ -4,7 +4,7 @@ import analyzer.NodeVisitor;
 
 import java.util.List;
 
-public class FuncDecl implements ASTNode{
+public class FuncDecl extends ASTNode{
     Type returnType;
     Identifier identifier;
     List<FormalParam> formalParamList;

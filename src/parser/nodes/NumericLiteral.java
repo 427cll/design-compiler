@@ -3,9 +3,8 @@ package parser.nodes;
 import lexer.token.Token;
 import analyzer.NodeVisitor;
 
-public class NumericLiteral implements ASTNode {
+public class NumericLiteral extends ASTNode {
     Integer value;
-    Token token;
 
     public NumericLiteral(Token numericLiteral) {
         this.token = numericLiteral;

@@ -4,7 +4,7 @@ import analyzer.NodeVisitor;
 
 import java.util.List;
 
-public class VariableStatement implements ASTNode{
+public class VariableStatement extends ASTNode{
     Type type;
     List<VariableDecl> declarations;
 

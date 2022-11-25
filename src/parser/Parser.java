@@ -151,7 +151,7 @@ public class Parser {
         ASTNode left = this.PrimaryExpression();
 
         while (this.lookAhead.getType() == TokenType.TK_PLUS) {
-            String operator = this.eat(TokenType.TK_PLUS).getValue();
+            Token operator = this.eat(TokenType.TK_PLUS);
             ASTNode right = this.AdditiveExpression();
             left = new BinaryExpression(operator, left, right);
         }

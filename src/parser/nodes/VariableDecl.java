@@ -2,7 +2,7 @@ package parser.nodes;
 
 import analyzer.NodeVisitor;
 
-public class VariableDecl implements ASTNode{
+public class VariableDecl extends ASTNode{
 
     Identifier id;
     ASTNode init;

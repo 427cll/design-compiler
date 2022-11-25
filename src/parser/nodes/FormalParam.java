@@ -3,7 +3,7 @@ package parser.nodes;
 
 import analyzer.NodeVisitor;
 
-public class FormalParam implements ASTNode{
+public class FormalParam extends ASTNode{
     Type type;
     Identifier id;
 

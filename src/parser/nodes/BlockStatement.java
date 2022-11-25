@@ -4,7 +4,7 @@ import analyzer.NodeVisitor;
 
 import java.util.List;
 
-public class BlockStatement implements ASTNode{
+public class BlockStatement extends ASTNode{
 
     List<ASTNode> body;
 

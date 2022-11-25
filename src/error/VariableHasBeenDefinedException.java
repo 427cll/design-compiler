@@ -1,10 +1,9 @@
 package error;
 
 import parser.nodes.Identifier;
-import utils.BeautifulError;
 
-public class VariableHasBeenDefinedException extends RuntimeException {
+public class VariableHasBeenDefinedException extends Error {
     public VariableHasBeenDefinedException(Identifier id) {
-        BeautifulError.print(id.getToken(), "Variable"+ id.getName() +" has been Defined;");
+        showError(id.getToken(), "Variable"+ id.getName() +" has been Defined");
     }
 }

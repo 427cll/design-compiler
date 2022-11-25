@@ -3,9 +3,9 @@ package parser.nodes;
 import lexer.token.Token;
 import analyzer.NodeVisitor;
 
-public class Identifier implements ASTNode{
+public class Identifier extends ASTNode{
     String name;
-    Token token;
+
     public Identifier(Token token) {
         this.token = token;
         this.name = token.getValue();
@@ -13,10 +13,6 @@ public class Identifier implements ASTNode{
 
     public String getName() {
         return name;
-    }
-
-    public Token getToken() {
-        return token;
     }
 
     @Override

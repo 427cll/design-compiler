@@ -2,7 +2,7 @@ package parser.nodes;
 
 import analyzer.NodeVisitor;
 
-public class AssignmentExpression implements ASTNode{
+public class AssignmentExpression extends ASTNode{
     ASTNode left;
     String operator;
     ASTNode right;

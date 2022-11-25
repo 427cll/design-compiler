@@ -4,7 +4,7 @@ import analyzer.NodeVisitor;
 
 import java.util.List;
 
-public class Program implements ASTNode{
+public class Program extends ASTNode{
     List<FuncDecl> funcDecls;
 
     public Program(List<FuncDecl> funcDecls) {

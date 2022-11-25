@@ -1,6 +1,6 @@
 package parser.nodes;
 
-import analyzer.NodeVisitor;
+import visitor.NodeVisitor;
 import lexer.token.Token;
 
 public class ReturnStatement extends ASTNode {

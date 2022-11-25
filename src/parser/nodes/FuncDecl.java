@@ -1,6 +1,6 @@
 package parser.nodes;
 
-import analyzer.NodeVisitor;
+import visitor.NodeVisitor;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ public class FuncDecl extends ASTNode{
     Identifier identifier;
     List<FormalParam> formalParamList;
     BlockStatement blockStatement;
+    Integer offset;
 
     public FuncDecl(Type type, Identifier identifier, List<FormalParam> formalParamList, BlockStatement blockStatement) {
         this.returnType = type;

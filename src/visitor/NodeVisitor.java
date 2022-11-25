@@ -1,4 +1,4 @@
-package analyzer;
+package visitor;
 
 import parser.nodes.*;
 

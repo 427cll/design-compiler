@@ -1,5 +1,6 @@
 package analyzer;
 
 public class Offset {
-    Integer sum = -999;
+    public static Integer sum = -999;
+
 }

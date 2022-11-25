@@ -1,7 +1,8 @@
 package parser.nodes;
 
 
-import analyzer.NodeVisitor;
+import visitor.NodeVisitor;
+import analyzer.env.ParameterSymbol;
 
 public class FormalParam extends ASTNode{
     Type type;
@@ -24,4 +25,6 @@ public class FormalParam extends ASTNode{
     public Identifier getId() {
         return id;
     }
+
+    public ParameterSymbol parameterSymbol;
 }

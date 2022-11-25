@@ -3,6 +3,7 @@ package analyzer;
 import analyzer.env.*;
 import error.InvalidLeftHandValueException;
 import parser.nodes.*;
+import visitor.NodeVisitor;
 
 import java.util.List;
 
@@ -29,7 +30,10 @@ public class SemanticAnalyzer implements NodeVisitor {
 
     @Override
     public void visitFuncDecl(FuncDecl funcDecl) {
-        Symbol symbol = new FunctionSymbol(funcDecl.getIdentifier(), funcDecl.getReturnType());
+        Offset.sum = 0;
+        Identifier id = funcDecl.getIdentifier();
+        Symbol symbol = new FunctionSymbol(id, null);
+
         this.currentEnvironment.define(symbol);
         currentEnvironment = new Environment(currentEnvironment);
 
@@ -47,8 +51,10 @@ public class SemanticAnalyzer implements NodeVisitor {
 
     @Override
     public void visitFormalParam(FormalParam formalParam) {
-        Symbol symbol = new ParameterSymbol(formalParam.getId(), formalParam.getType());
+        Offset.sum += 8;
+        ParameterSymbol symbol = new ParameterSymbol(formalParam.getId(), formalParam.getType(), -Offset.sum);
         this.currentEnvironment.define(symbol);
+        formalParam.parameterSymbol = symbol;
     }
 
     @Override
@@ -95,9 +101,10 @@ public class SemanticAnalyzer implements NodeVisitor {
     @Override
     public void visitVariableStatement(VariableStatement variableStatement) {
         Type type = variableStatement.getType();
-        for (VariableDecl declaration : variableStatement.getDeclarations()) {
 //            declaration.accept(this);
-            VariableSymbol symbol = new VariableSymbol(declaration.getId(), type);
+        for (VariableDecl declaration : variableStatement.getDeclarations()) {
+            Offset.sum += 8;
+            VariableSymbol symbol = new VariableSymbol(declaration.getId(), type, -Offset.sum);
             this.currentEnvironment.define(symbol);
         }
     }

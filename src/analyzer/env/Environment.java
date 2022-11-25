@@ -38,7 +38,7 @@ public class Environment {
     }
 
     /**
-     * 找到 name 所在的环境, 必须要传入含有 token 的对象
+     * 传入 Id 的原因是报错时需要 token 保存的行号和列号
      */
     public Environment resolve(Identifier identifier) {
         String name = identifier.getName();

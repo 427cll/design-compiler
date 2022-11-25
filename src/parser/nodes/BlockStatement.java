@@ -1,6 +1,6 @@
 package parser.nodes;
 
-import analyzer.NodeVisitor;
+import visitor.NodeVisitor;
 
 import java.util.List;
 

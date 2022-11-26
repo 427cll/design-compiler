@@ -57,8 +57,8 @@ public class Analyzer implements NodeVisitor {
     public void visitFormalParam(FormalParam formalParam) {
         Offset.sum += 8;
         ParameterSymbol symbol = new ParameterSymbol(formalParam.getId(), formalParam.getType(), -Offset.sum);
+        formalParam.setParameterSymbol(symbol);
         this.currentEnvironment.define(symbol);
-        formalParam.parameterSymbol = symbol;
     }
 
     @Override
@@ -109,7 +109,8 @@ public class Analyzer implements NodeVisitor {
             Offset.sum += 8;
             VariableSymbol symbol = new VariableSymbol(declaration.getId(), type, -Offset.sum);
             this.currentEnvironment.define(symbol);
-            declaration.setSymbol(symbol);
+            declaration.getId().setSymbol(symbol);
+            declaration.getInit().accept(this);
         }
     }
 

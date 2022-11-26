@@ -34,7 +34,7 @@ public class Generator implements NodeVisitor {
 
         int i = 0;
         for (FormalParam formalParam : funcDecl.getFormalParamList()) {
-            int paramOffset = formalParam.parameterSymbol.getOffset();
+            int paramOffset = formalParam.getParameterSymbol().getOffset();
             System.out.println("    mov %" + parameter_registers[i] + ", " + paramOffset + "(%rbp)");
             i += 1;
         }
@@ -126,13 +126,18 @@ public class Generator implements NodeVisitor {
      */
     @Override
     public void visitVariableDecl(VariableDecl variableDecl) {
-        Integer offset = variableDecl.getSymbol().getOffset();
-        System.out.println("    lea " + offset + "(%rbp), %rax");
-        System.out.println("    push %rax");
+        if (variableDecl.getInit() != null) {
 
-        variableDecl.getInit().accept(this);
-        System.out.println("    pop %rdi");
-        System.out.println("    mov %rax, (%rdi)");
+            Integer offset = variableDecl.getId().getSymbol().getOffset();
+            System.out.println("    lea " + offset + "(%rbp), %rax");
+            System.out.println("    push %rax");
+
+            variableDecl.getInit().accept(this);
+            System.out.println("    pop %rdi");
+            System.out.println("    mov %rax, (%rdi)");
+        }
+
+
     }
 
     @Override

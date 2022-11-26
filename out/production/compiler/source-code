@@ -1,5 +1,5 @@
-int main(int c) { int 3 = 3;}
-
-
+int foo(int x) {
+    int a = x;
+}
 
 

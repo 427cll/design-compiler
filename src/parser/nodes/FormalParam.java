@@ -7,6 +7,8 @@ import analyzer.env.ParameterSymbol;
 public class FormalParam extends ASTNode{
     Type type;
     Identifier id;
+    ParameterSymbol parameterSymbol;
+
 
     public FormalParam(Type type, Identifier id) {
         this.type = type;
@@ -26,5 +28,11 @@ public class FormalParam extends ASTNode{
         return id;
     }
 
-    public ParameterSymbol parameterSymbol;
+    public ParameterSymbol getParameterSymbol() {
+        return parameterSymbol;
+    }
+
+    public void setParameterSymbol(ParameterSymbol parameterSymbol) {
+        this.parameterSymbol = parameterSymbol;
+    }
 }

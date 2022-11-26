@@ -5,15 +5,18 @@ import lexer.token.Token;
 
 public class BooleanLiteral extends ASTNode{
     Boolean value;
-    Token token;
 
     public BooleanLiteral(Token token) {
-        this.value = token.getValue().equals("true");
         this.token = token;
+        this.value = token.getValue().equals("true");
+    }
+
+    public Boolean getValue() {
+        return value;
     }
 
     @Override
     public void accept(NodeVisitor visitor) {
-        visitor.visitBooleanLiteral();
+        visitor.visitBooleanLiteral(this);
     }
 }

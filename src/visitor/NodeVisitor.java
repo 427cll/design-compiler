@@ -18,6 +18,6 @@ public interface NodeVisitor {
 
     void visitType(Type type);
 
-    void visitNumericLiteral();
-    void visitBooleanLiteral();
+    void visitNumericLiteral(NumericLiteral numericLiteral);
+    void visitBooleanLiteral(BooleanLiteral booleanLiteral);
 }

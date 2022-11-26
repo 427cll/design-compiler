@@ -38,4 +38,12 @@ public class FuncDecl extends ASTNode{
     public Type getReturnType() {
         return returnType;
     }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
 }

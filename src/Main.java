@@ -1,4 +1,5 @@
-import analyzer.SemanticAnalyzer;
+import analyzer.Analyzer;
+import generator.Generator;
 import lexer.Lexer;
 import parser.Parser;
 import parser.nodes.Program;
@@ -8,7 +9,6 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
         //1. 读入源代码
         String inputText = TextInput.inputText;
 
@@ -20,9 +20,12 @@ public class Main {
         Program program = parser.parse();
 
         //4. 语义分析
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
-        semanticAnalyzer.analyze(program);
+        Analyzer analyzer = new Analyzer();
+        analyzer.analyze(program);
+
         //5. 代码生成
+        Generator generator = new Generator();
+        generator.generate(program);
 
 
     }

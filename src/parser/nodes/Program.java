@@ -11,7 +11,7 @@ public class Program extends ASTNode{
         this.funcDecls = funcDecls;
     }
 
-    public List<FuncDecl> getFuncNodes() {
+    public List<FuncDecl> getFuncDecls() {
         return funcDecls;
     }
 

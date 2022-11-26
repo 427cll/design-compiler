@@ -1,8 +1,4 @@
-int main() {
-   int a = 3;
-   2 + 3 = 3;
-   return 0;
-}
+int main(int c) { int 3 = 3;}
 
 
 

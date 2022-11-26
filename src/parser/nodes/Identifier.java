@@ -1,9 +1,11 @@
 package parser.nodes;
 
+import analyzer.env.Symbol;
 import lexer.token.Token;
 import visitor.NodeVisitor;
 
 public class Identifier extends ASTNode{
+    Symbol symbol;
     String name;
 
     public Identifier(Token token) {
@@ -12,7 +14,16 @@ public class Identifier extends ASTNode{
     }
 
     public String getName() {
+
         return name;
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 
     @Override

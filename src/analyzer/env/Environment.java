@@ -37,9 +37,6 @@ public class Environment {
         return this.resolve(identifier).record.get(name);
     }
 
-    /**
-     * 传入 Id 的原因是报错时需要 token 保存的行号和列号
-     */
     public Environment resolve(Identifier identifier) {
         String name = identifier.getName();
 

@@ -7,21 +7,16 @@ import visitor.NodeVisitor;
 
 import java.util.List;
 
-public class SemanticAnalyzer implements NodeVisitor {
+public class Analyzer implements NodeVisitor {
 
     Environment currentEnvironment;
 
-    public SemanticAnalyzer() {
+    public Analyzer() {
         currentEnvironment = new Environment(null);
     }
 
-    @Override
-    public void visitProgram(Program program) {
-        //pass
-    }
-
     public void analyze(Program program) {
-        List<FuncDecl> funcNodes = program.getFuncNodes();
+        List<FuncDecl> funcNodes = program.getFuncDecls();
         //每一个函数接受检查
         for (FuncDecl funcNode : funcNodes) {
             funcNode.accept(this);
@@ -29,12 +24,17 @@ public class SemanticAnalyzer implements NodeVisitor {
     }
 
     @Override
+    public void visitProgram(Program program) {
+        //pass
+    }
+
+    @Override
     public void visitFuncDecl(FuncDecl funcDecl) {
         Offset.sum = 0;
         Identifier id = funcDecl.getIdentifier();
-        Symbol symbol = new FunctionSymbol(id, null);
+        FunctionSymbol functionSymbol = new FunctionSymbol(id, null);
 
-        this.currentEnvironment.define(symbol);
+        this.currentEnvironment.define(functionSymbol);
         currentEnvironment = new Environment(currentEnvironment);
 
         List<FormalParam> formalParamList = funcDecl.getFormalParamList();
@@ -45,7 +45,11 @@ public class SemanticAnalyzer implements NodeVisitor {
         BlockStatement blockStatement = funcDecl.getBlockStatement();
         blockStatement.accept(this);
 
+        funcDecl.setOffset(Offset.sum);
+
         this.currentEnvironment = currentEnvironment.parent;
+
+        functionSymbol.setBlockStatement(funcDecl.getBlockStatement());
 
     }
 
@@ -86,12 +90,11 @@ public class SemanticAnalyzer implements NodeVisitor {
         }
     }
 
-
     @Override
     public void visitIdentifier(Identifier identifier) {
         Symbol lookup = this.currentEnvironment.lookup(identifier);
+        identifier.setSymbol(lookup);
     }
-
 
     @Override
     public void visitReturnStatement(ReturnStatement returnStatement) {
@@ -106,6 +109,7 @@ public class SemanticAnalyzer implements NodeVisitor {
             Offset.sum += 8;
             VariableSymbol symbol = new VariableSymbol(declaration.getId(), type, -Offset.sum);
             this.currentEnvironment.define(symbol);
+            declaration.setSymbol(symbol);
         }
     }
 
@@ -120,12 +124,12 @@ public class SemanticAnalyzer implements NodeVisitor {
     }
 
     @Override
-    public void visitNumericLiteral() {
+    public void visitNumericLiteral(NumericLiteral numericLiteral) {
         // PASS
     }
 
     @Override
-    public void visitBooleanLiteral() {
+    public void visitBooleanLiteral(BooleanLiteral booleanLiteral) {
         // PASS
     }
 }

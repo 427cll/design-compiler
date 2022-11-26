@@ -5,12 +5,12 @@ import visitor.NodeVisitor;
 import lexer.token.Token;
 
 public class BinaryExpression extends ASTNode {
-    String operator;
+    Token operator;
     ASTNode left;
     ASTNode right;
 
     public BinaryExpression(Token operator, ASTNode left, ASTNode right) {
-        this.operator = operator.getValue();
+        this.operator = operator;
         this.left = left;
         this.right = right;
         this.token = left.getToken();//TODO
@@ -21,6 +21,9 @@ public class BinaryExpression extends ASTNode {
         visitor.visitBinaryExpression(this);
     }
 
+    public Token getOperator() {
+        return operator;
+    }
 
     public ASTNode getLeft() {
         return left;

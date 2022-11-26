@@ -21,4 +21,10 @@ public class FunctionSymbol extends Symbol {
                         ? new ArrayList<>()
                         : formalParams;
     }
+
+    public void setBlockStatement(BlockStatement blockStatement) {
+        this.blockStatement = blockStatement;
+    }
+
+
 }

@@ -6,8 +6,10 @@ import parser.nodes.Type;
 public class Symbol {
     Type type;
     Identifier id;
+    Integer offset;
 
-    public Symbol(){}
+    public Symbol() {
+    }
 
     public Symbol(Identifier id, Type type) {
         this.id = id;
@@ -20,5 +22,9 @@ public class Symbol {
 
     public Identifier getId() {
         return id;
+    }
+
+    public Integer getOffset() {
+        return offset;
     }
 }

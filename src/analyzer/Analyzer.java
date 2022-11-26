@@ -104,13 +104,14 @@ public class Analyzer implements NodeVisitor {
     @Override
     public void visitVariableStatement(VariableStatement variableStatement) {
         Type type = variableStatement.getType();
-//            declaration.accept(this);
         for (VariableDecl declaration : variableStatement.getDeclarations()) {
             Offset.sum += 8;
             VariableSymbol symbol = new VariableSymbol(declaration.getId(), type, -Offset.sum);
             this.currentEnvironment.define(symbol);
-            declaration.getId().setSymbol(symbol);
-            declaration.getInit().accept(this);
+
+            declaration.getId().accept(this);
+            if(declaration.getInit()!=null)
+                declaration.getInit().accept(this);
         }
     }
 

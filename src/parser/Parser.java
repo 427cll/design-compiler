@@ -13,6 +13,7 @@ public class Parser {
     private final Lexer lexer;
     private Token lookAhead;
     String text;
+    String currFuncName;
 
     public Parser(Lexer lexer, String text) {
         this.lexer = lexer;
@@ -40,9 +41,12 @@ public class Parser {
 
         Identifier identifier = this.Identifier();
 
+        this.currFuncName = identifier.getName();
+
         List<FormalParam> params = this.FormalParameterList();
 
         BlockStatement blockStatement = ((BlockStatement) this.BlockStatement());
+
 
         return new FuncDecl(type, identifier, params, blockStatement);
     }
@@ -244,7 +248,7 @@ public class Parser {
         Token token = this.eat(TokenType.TK_RETURN);
         ASTNode right = this.AssignmentExpression();
         this.eat(TokenType.TK_SEMICOLON);
-        return new ReturnStatement(token, right);
+        return new ReturnStatement(token, right, currFuncName);
     }
 
     private Token eat(TokenType tokenType) {

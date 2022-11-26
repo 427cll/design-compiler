@@ -101,15 +101,9 @@ public class Generator implements NodeVisitor {
     @Override
     public void visitReturnStatement(ReturnStatement returnStatement) {
         returnStatement.getRight().accept(this);
-        System.out.println("    jmp .{node.function_name}.return");
+        System.out.println("    jmp ."+returnStatement.getFuncName()+".return");
     }
 
-    /**
-     * int a = 3;
-     * int b = 1, c = 2;
-     *
-     * @param variableStatement
-     */
     @Override
     public void visitVariableStatement(VariableStatement variableStatement) {
         for (VariableDecl declaration : variableStatement.getDeclarations()) {
@@ -118,12 +112,6 @@ public class Generator implements NodeVisitor {
 
     }
 
-    /**
-     * a = 3;
-     * b = 2;
-     *
-     * @param variableDecl
-     */
     @Override
     public void visitVariableDecl(VariableDecl variableDecl) {
         if (variableDecl.getInit() != null) {

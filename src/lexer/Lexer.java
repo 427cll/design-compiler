@@ -1,6 +1,7 @@
 package lexer;
 
 import error.Error;
+import error.InvalidCharException;
 import lexer.token.Token;
 import lexer.token.TokenType;
 import utils.CharCheck;
@@ -56,21 +57,7 @@ public class Lexer {
             } else if (CharCheck.isSinglePunct(currChar)) {
                 return handleSinglePunct();
             } else {
-                System.out.println("\033[31m" + "@ Lineno: " + Error.lineno + ", Column: " + Error.column);
-                System.out.println("Unexpected Character '" + currChar + "'; ");
-                System.out.println();
-                String[] split = text.split("\n");
-                for (int i = 0; i < split.length; i++) {
-                    if (i == Error.lineno) {
-                        System.out.println(split[i - 1]);
-                    }
-                }
-                for (int i = 0; i < Error.column - 1; i++) {
-                    System.out.print(" ");
-                }
-                System.out.println("^");
-
-                System.exit(0);
+                throw new InvalidCharException(currChar);
             }
 
         }

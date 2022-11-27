@@ -33,9 +33,6 @@ public class Parser {
         return new Program(funcDeclList);
     }
 
-    /*
-     * ★★★★★★★★★★★ 核心方法 ★★★★★★★★★★★★
-     */
     private FuncDecl FunctionDeclaration() {
         Type type = this.Type();
 
@@ -68,9 +65,6 @@ public class Parser {
     }
 
 
-    /**
-     * 本来有个 stopLookAhead 参数，在这里用不着
-     */
     private List<ASTNode> StatementList() {
         List<ASTNode> statementList = new ArrayList<>();
         while (this.lookAhead.getType() != TokenType.TK_EOF && this.lookAhead.getType() != TokenType.TK_RBRACE) {
@@ -86,7 +80,7 @@ public class Parser {
      * | VariableStatement
      * ;
      *
-     * @return 注意返回值不同情况下类型不同
+     * @return 注意返回值不同情况下类型不同，暂且用 ASTNode 处理
      */
     private ASTNode Statement() {
         Token token = this.lookAhead;

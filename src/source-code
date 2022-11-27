@@ -1,5 +1,6 @@
 int foo(int x, int y) {
     int a = x / y;
+    b =2;
 }
 
 

@@ -84,7 +84,12 @@ public class Generator implements NodeVisitor {
         System.out.println("    pop %rdi");
         switch (binaryExpression.getOperator().getType()) {
             case TK_PLUS -> System.out.println("    add %rdi, %rax");
-            case TK_MINUS -> System.out.println("TODO");
+            case TK_MINUS -> System.out.println("    sub %rdi, %rax");
+            case TK_MUL -> System.out.println("    imul %rdi, %rax");
+            case TK_DIV -> {
+                System.out.println("    cqo");
+                System.out.println("    idiv %rdi");
+            }
             // etc.
         }
 

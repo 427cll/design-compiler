@@ -109,9 +109,13 @@ public class Parser {
     }
 
     private ASTNode ExpressionStatement() {
-        ASTNode astNode = this.AssignmentExpression();
+        ASTNode astNode = this.Expression();
         this.eat(TokenType.TK_SEMICOLON);
         return astNode;
+    }
+
+    private ASTNode Expression() {
+        return this.AssignmentExpression();
     }
 
     private ASTNode AssignmentExpression() {
@@ -131,6 +135,41 @@ public class Parser {
     }
 
 
+    private ASTNode AdditiveExpression() {
+        ASTNode left = this.MultiplicativeExpression();
+
+        while (true) {
+            Token operator = null;
+            if (this.lookAhead.getType() == TokenType.TK_PLUS) {
+                operator = this.eat(TokenType.TK_PLUS);
+            } else if (this.lookAhead.getType() == TokenType.TK_MINUS) {
+                operator = this.eat(TokenType.TK_MINUS);
+            } else {
+                return left;
+            }
+            ASTNode right = this.MultiplicativeExpression();
+            left = new BinaryExpression(operator, left, right);
+        }
+
+    }
+
+
+    private ASTNode MultiplicativeExpression() {
+        ASTNode left = this.PrimaryExpression();
+        while (true) {
+            Token operator = null;
+            if (this.lookAhead.getType() == TokenType.TK_MUL) {
+                operator = this.eat(TokenType.TK_MUL);
+            } else if (this.lookAhead.getType() == TokenType.TK_DIV) {
+                operator = this.eat(TokenType.TK_DIV);
+            } else {
+                return left;
+            }
+            ASTNode right = this.PrimaryExpression();
+            left = new BinaryExpression(operator, left, right);
+        }
+    }
+
     private ASTNode PrimaryExpression() {
         return switch (this.lookAhead.getType()) {
             case TK_INTEGER_CONST, TK_BOOL_CONST_TRUE, TK_BOOL_CONST_FALSE -> this.Literal();
@@ -144,23 +183,16 @@ public class Parser {
     }
 
     private ASTNode ParenthesizedExpression() {
-        return null;
+        this.eat(TokenType.TK_LPAREN);
+        ASTNode expression = this.Expression();
+        this.eat(TokenType.TK_RPAREN);
+        return expression;
     }
 
     private boolean isAssignmentOperator(Token lookAhead) {
         return lookAhead.getType() == TokenType.TK_ASSIGN;
     }
 
-    private ASTNode AdditiveExpression() {
-        ASTNode left = this.PrimaryExpression();
-
-        while (this.lookAhead.getType() == TokenType.TK_PLUS) {
-            Token operator = this.eat(TokenType.TK_PLUS);
-            ASTNode right = this.AdditiveExpression();
-            left = new BinaryExpression(operator, left, right);
-        }
-        return left;
-    }
 
     private ASTNode Literal() {
         return switch (this.lookAhead.getType()) {
